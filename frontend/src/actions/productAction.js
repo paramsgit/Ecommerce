@@ -2,6 +2,7 @@ import axios from "axios";
 
 import {
   ALL_PRODUCT_FAIL,
+  ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
   CLEAR_ERRORS,
   PRODUCT_DETAILS_REQUEST,
@@ -12,7 +13,9 @@ import {
 export const getProduct =() =>
   async (dispatch) => {
     try {
-      const {data} = await axios.get("/api/v1/products");
+      dispatch({type:ALL_PRODUCT_REQUEST})
+      // console.log("Me getProducts me hu")
+      const {data} = await axios.get("http://localhost:4000/api/v1/products");
       console.log(data);
       dispatch({
         type: ALL_PRODUCT_SUCCESS,
