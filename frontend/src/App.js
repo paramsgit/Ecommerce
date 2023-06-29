@@ -5,6 +5,10 @@ import Home from './component/Home/Home';
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import WebFont from "webfontloader";
 import { useEffect } from "react";
+import ProductDetails from './component/Product/ProductDetails';
+import Products from './component/Product/Products';
+import Search from './component/Product/Search';
+
 
 function App() {
 
@@ -20,9 +24,12 @@ function App() {
   return (
     <Router>
     <Header/>
-    <Home/>
+    
     <Routes>
-    <Route exact path="/" component={Home}/>
+    <Route exact path="/" element={<Home/>}/>
+    <Route exact path="/product/:id" element={<ProductDetails/>}/>
+    <Route exact path="/products" element={<Products/>}/>
+    <Route exact path="/search" element={<Search/>}/>
     </Routes>
     <Footer/>
     </Router>
