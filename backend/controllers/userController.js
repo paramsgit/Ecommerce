@@ -5,14 +5,22 @@ const bcryptjs = require("bcryptjs");
 const User = require('../models/userModel');
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const cloudinary = require("cloudinary");
 
 
 
 
 //Create a new user using POST "/api/auth/createuser"---Do not require login
 exports.registerUser = catchAsyncError(async (req, res) => {
-
+  console.log("Register: ",req.body);
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
+  // const myCloud = await cloudinary.uploader.upload(req.body.avatar).then(result=>console.log(result));
   const { name, email, password } = req.body;
+  console.log(myCloud);
   let user = await User.findOne({ email: req.body.email });
   if (user) {
     return res.status(404).json({ error: "Email already exists" });
@@ -22,8 +30,8 @@ exports.registerUser = catchAsyncError(async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     avatar: {
-      public_id: "This is id",
-      url: "avatarurl",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
 

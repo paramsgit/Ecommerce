@@ -10,16 +10,15 @@ import {
   PRODUCT_DETAILS_SUCCESS,
 } from "../constants/productConstants";
 // Get All Products
-export const getProduct =(keyword = "", currentPage = 1, price = [0, 25000], category, ratings = 0) =>
+export const getProduct =(keyword = "", currentPage = 1, price = [0, 100000], category, ratings = 0) =>
   async (dispatch) => {
     try {
       dispatch({type:ALL_PRODUCT_REQUEST})
-      // console.log("Me getProducts me hu")
       let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
       if (category) {
         link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
       }
-      const {data} = await axios.get('http://localhost:4000/api/v1/products');
+      const {data} = await axios.get(link);
       console.log(data);
       dispatch({
         type: ALL_PRODUCT_SUCCESS,
