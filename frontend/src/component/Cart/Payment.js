@@ -4,12 +4,15 @@ import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layout/MetaData";
 import { Typography } from "@material-ui/core";
 import { useAlert } from "react-alert";
+import '@stripe/stripe-js'; 
+import '@stripe/react-stripe-js'; 
 import {
   CardNumberElement,
   CardCvcElement,
   CardExpiryElement,
   useStripe,
   useElements,
+  PaymentElement,
 } from "@stripe/react-stripe-js";
 
 import axios from "axios";
@@ -57,14 +60,15 @@ const Payment = () => {
           "Content-Type": "application/json",
         },
       };
+      console.log("In submit")
       const { data } = await axios.post(
-        "/api/v1/payment/process",
+        "http://localhost:4000/api/v1/payment/process",
         paymentData,
         config
       );
 
       const client_secret = data.client_secret;
-
+      
       if (!stripe || !elements) return;
 
       const result = await stripe.confirmCardPayment(client_secret, {
@@ -124,15 +128,15 @@ const Payment = () => {
           <Typography>Card Info</Typography>
           <div>
             <CreditCardIcon />
-            <CardNumberElement className="paymentInput" />
+            <input className="paymentInput" />
           </div>
           <div>
             <EventIcon />
-            <CardExpiryElement className="paymentInput" />
+            <input className="paymentInput" />
           </div>
           <div>
             <VpnKeyIcon />
-            <CardCvcElement className="paymentInput" />
+            <input className="paymentInput" />
           </div>
 
           <input

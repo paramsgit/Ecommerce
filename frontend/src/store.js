@@ -1,8 +1,5 @@
 import { createStore,combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
 import { composeWithDevTools } from "redux-devtools-extension";
 import { 
   newProductReducer,
@@ -28,11 +25,8 @@ import {
   orderDetailsReducer,
   orderReducer,
 } from "./reducers/orderReducer";
-const persistConfig = {
-  key: 'userReducer',
-  storage: storage,
-  whitelist: ['userReducer'] // which reducer want to store
-};
+
+
 const reducer = combineReducers({
   products: productsReducer,
   productDetails:productDetailsReducer,
@@ -65,17 +59,15 @@ let initialState = {
       : {},
   },
 };
-const pReducer = persistReducer(persistConfig,reducer);
 const middleware = [thunk];
 
 const store = createStore(
-  pReducer,
+  reducer,
   initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );
 
-const persistor = persistStore(store);
-export {persistor,store};
+export default store;
 
 
 

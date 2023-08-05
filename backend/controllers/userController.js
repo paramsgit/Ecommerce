@@ -1,7 +1,7 @@
 const ErrorHandler = require("../utils/errorhandler");
 const sendToken = require("../utils/jwtToken");
 const catchAsyncError = require("../middleware/catchAsyncError");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const User = require('../models/userModel');
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
@@ -47,8 +47,8 @@ exports.registerUser = catchAsyncError(async (req, res) => {
 });
 
 //login  User
-exports.loginUser = catchAsyncError(async (req, res, next) => {
-
+exports.loginUser = async (req, res, next) => {
+  console.log("I am in login")
   const { email, password } = req.body;
   // checking if user has given password and email both
   if (!email || !password) {
@@ -58,9 +58,9 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler("Invalid email or password", 401));
   }
-
-  const isPasswordMatched = await user.comparePassword(password);
-
+  console.log(user);
+  // const isPasswordMatched = await user.comparePassword(password);
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
   if (!isPasswordMatched) {
     return next(new ErrorHandler("Invalid email or password", 401));
   }
@@ -71,7 +71,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   // });
   sendToken(user, 200, res);
 
-});
+};
 
 
 // Logout User
